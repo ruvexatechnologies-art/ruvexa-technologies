@@ -2,7 +2,7 @@
 FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
+    git unzip libpq-dev libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mysqli gd zip pdo_pgsql \
     && a2enmod rewrite \

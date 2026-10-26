@@ -1,10 +1,10 @@
-```dockerfile
+
 FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql mysqli gd zip \
+    && docker-php-ext-install pdo pdo_mysql mysqli gd zip pdo_pgsql \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
@@ -17,14 +17,12 @@ COPY . /var/www/html
 
 WORKDIR /var/www/html
 
-RUN if [ -f composer.json ]; then \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    composer install --no-dev --optimize-autoloader --no-interaction; \
-    fi \
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer install --no-dev --optimize-autoloader --no-interaction \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
 
 CMD ["apache2-foreground"]
-```
+
